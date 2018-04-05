@@ -103,4 +103,4 @@ ENV/
 ### My additions
 .idea/
 stuff/
-
+data/creditcard.csv
