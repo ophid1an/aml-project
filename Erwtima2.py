@@ -16,14 +16,14 @@ from costcla.models import CostSensitiveDecisionTreeClassifier,BayesMinimumRiskC
 from costcla.sampling import cost_sampling, undersampling
 
 from IPython.core.pylabtools import figsize
-import matplotlib.pyplot as plt
-import seaborn as sns
+# import matplotlib.pyplot as plt
+# import seaborn as sns
 
 
 data1 = load_creditscoring1()
 Data=[]
 target=[]
-data="./Datasets/heart.txt"
+data="./Datasets/heart.dat"
 heart_data= p.read_csv(data,delimiter=" ") #load StatLog(heart) dataset
 
 #Iris data and target
