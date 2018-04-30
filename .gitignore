@@ -104,3 +104,5 @@ ENV/
 .idea/
 stuff/
 data/creditcard.csv
+Datasets/creditcard.csv
+
