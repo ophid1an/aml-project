@@ -23,7 +23,7 @@ from IPython.core.pylabtools import figsize
 data1 = load_creditscoring1()
 Data=[]
 target=[]
-data="./Datasets/heart.dat"
+data="./Datasets/heart.txt"
 heart_data= p.read_csv(data,delimiter=" ") #load StatLog(heart) dataset
 
 #Iris data and target
