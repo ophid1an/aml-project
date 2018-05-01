@@ -1,1 +1,2 @@
-# aml-project
+# Advanced Machine Learning Course
+## First project
