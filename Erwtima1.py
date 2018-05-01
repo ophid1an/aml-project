@@ -17,50 +17,54 @@ import pandas as pa
 import scipy
 
 RANDOM_STATE = 0
+READ_RESULTS = False
+WRITE_RESULTS = False
+VERSION = 1
 
-iris_df = pa.read_csv("./Datasets/iris.csv")  # load Iris Dataset
-wine_df = pa.read_csv("./Datasets/wine.csv")  # load Wine Dataset
-bcancer_df = pa.read_csv("./Datasets/wdbc.csv")  # load Breast Cancer Dataset
-balance_df = pa.read_csv("./Datasets/balance-scale.csv")  # load Balance Scale Dataset
-hayesroth_df = pa.read_csv("./Datasets/hayesroth.csv")  # load Hayes-Roth Dataset
-haberman_df = pa.read_csv("./Datasets/haberman.csv")  # load Haberman's Survival Dataset
-liver_df = pa.read_csv("./Datasets/liverdisorder.csv")  # load Liver Disorders Dataset
-bank_df = pa.read_csv("./Datasets/data_banknote_authentication.csv")  # load Banknote Authentication Dataset
-ionosphere_df = pa.read_csv("./Datasets/ionosphere.csv")  # load Ionosphere Dataset
-cmc_df = pa.read_csv("./Datasets/cmc.csv")  # load Contraceptive Method Choice Dataset"
+iris_df = pa.read_csv("./Datasets/iris.csv", header=None)  # load Iris Dataset
+wine_df = pa.read_csv("./Datasets/wine.csv", header=None)  # load Wine Dataset
+bcancer_df = pa.read_csv("./Datasets/wdbc.csv", header=None)  # load Breast Cancer Dataset
+balance_df = pa.read_csv("./Datasets/balance-scale.csv", header=None)  # load Balance Scale Dataset
+hayesroth_df = pa.read_csv("./Datasets/hayesroth.csv", header=None)  # load Hayes-Roth Dataset
+haberman_df = pa.read_csv("./Datasets/haberman.csv", header=None)  # load Haberman's Survival Dataset
+liver_df = pa.read_csv("./Datasets/liverdisorder.csv", header=None)  # load Liver Disorders Dataset
+bank_df = pa.read_csv("./Datasets/data_banknote_authentication.csv",
+                      header=None)  # load Banknote Authentication Dataset
+ionosphere_df = pa.read_csv("./Datasets/ionosphere.csv", header=None)  # load Ionosphere Dataset
+cmc_df = pa.read_csv("./Datasets/cmc.csv", header=None)  # load Contraceptive Method Choice Dataset
 
 Data = []
 target = []
 # Iris data and target
-iris_data = iris_df.iloc[:, 0:3]
-iris_target = iris_df.iloc[:, 4]
+iris_data = iris_df.iloc[:, :-1]
+iris_target = iris_df.iloc[:, -1]
 # Wine data and target
-wine_data = wine_df.iloc[:, 1:12]
+wine_data = wine_df.iloc[:, 1:]
 wine_target = wine_df.iloc[:, 0]
 # Breast cancer data and target
-bcancer_data = bcancer_df.iloc[:, 2:31]
+bcancer_data = bcancer_df.iloc[:, 2:]
 bcancer_target = bcancer_df.iloc[:, 1]
 # Balance-scale data and target
-balance_data = balance_df.iloc[:, 1:4]
+balance_data = balance_df.iloc[:, 1:]
 balance_target = balance_df.iloc[:, 0]
 # hayes-roth data and target
-hayesroth_data = hayesroth_df.iloc[:, 0:4]
-hayesroth_target = hayesroth_df.iloc[:, 5]
+hayesroth_data = hayesroth_df.iloc[:, 1:-1]
+hayesroth_target = hayesroth_df.iloc[:, -1]
 # Haberman survival data and target
-haberman_data = haberman_df.iloc[:, 0:2]
-haberman_target = haberman_df.iloc[:, 3]
+haberman_data = haberman_df.iloc[:, :-1]
+haberman_target = haberman_df.iloc[:, -1]
 # Liver Disorder  data and target
-liver_data = liver_df.iloc[:, 0:5]
-liver_target = liver_df.iloc[:, 6]
-# Chess(Rook vs King) data and target
-bank_data = bank_df.iloc[:, 0:3]
-bank_target = bank_df.iloc[:, 4]
+liver_data = liver_df.iloc[:, :-2]
+liver_target = liver_df.iloc[:, -2].map(lambda x: 0 if x < 3 else 1)
+# Banknote Authentication data and target
+bank_data = bank_df.iloc[:, :-1]
+bank_target = bank_df.iloc[:, -1]
 # Ionosphere data and target
-ionosphere_data = ionosphere_df.iloc[:, 0:33]
-ionosphere_target = ionosphere_df.iloc[:, 34]
+ionosphere_data = ionosphere_df.iloc[:, :-1]
+ionosphere_target = ionosphere_df.iloc[:, -1]
 # cmc data and target
-cmc_data = cmc_df.iloc[:, 0:8]
-cmc_target = cmc_df.iloc[:, 9]
+cmc_data = cmc_df.iloc[:, :-1]
+cmc_target = cmc_df.iloc[:, -1]
 # Data is the table with all dataset data
 Data.append(iris_data)
 Data.append(wine_data)
@@ -84,10 +88,8 @@ target.append(bank_target)
 target.append(ionosphere_target)
 target.append(cmc_target)
 # Table with the labels for each dataset
-Data_label = ["Iris Dataset", "Wine Dataset", "Breast Cancer Dataset", "Balance Scale Dataset", "Hayes-Roth Dataset",
-              "Haberman's Survival Dataset", "Liver Disorders Dataset", "Banknote Authentication Dataset",
-              "Ionosphere Dataset",
-              "Contraceptive Method Choice Dataset"]
+Data_label = ["Iris", "Wine", "Breast Cancer", "Balance Scale", "Hayes-Roth", "Haberman's Survival",
+              "Liver Disorders", "Banknote Authentication", "Ionosphere", "Contraceptive Method Choice"]
 
 classifiers = []
 # Tree Classifier
@@ -120,10 +122,40 @@ classifiers.append([rf, "Random forest"])
 bagged_dt_mf = BaggingClassifier(dt, n_estimators=100, max_samples=0.7, max_features=0.7, random_state=RANDOM_STATE)
 classifiers.append([bagged_dt_mf, "bagged tree random patches"])
 
+results = []
+
 for i in range(len(Data)):
     print("------ %20s ------ " % (Data_label[i]))
+    row = []
     for classifier, label in classifiers:
         start = time.time()
         scores = cross_val_score(classifier, Data[i], target[i], cv=10)
         stop = time.time()
         print("%20s accuracy: %0.3f (+/- %0.3f), time:%.3f" % (label, scores.mean(), scores.std() * 2, stop - start))
+        row.append(round(scores.mean(), 3))
+    results.append(row)
+
+if READ_RESULTS or WRITE_RESULTS:
+    filename = 'erwthma1-results.csv'
+    filename_diff = filename.split('.')[0] + '-diff.' + filename.split('.')[1]
+    results_df = pa.DataFrame(data=results, columns=list(map(lambda x: x[1], classifiers)), index=Data_label)
+
+    if READ_RESULTS:
+        print(results_df)
+        try:
+            prev_results_df = pa.read_csv(filename, index_col=0)
+            results_diff_df = results_df.subtract(prev_results_df).round(decimals=3)
+            print(results_diff_df)
+        except Exception:
+            pass
+
+    if WRITE_RESULTS:
+        try:
+            prev_results_df = pa.read_csv(filename, index_col=0)
+            results_diff_df = results_df.subtract(prev_results_df).round(decimals=3)
+            results_diff_df.to_csv(filename_diff)
+        except Exception:
+            pass
+        results_df.to_csv(
+            './stuff/results/' + filename.split('.')[0] + str(VERSION).rjust(3, '0') + '.' + filename.split('.')[1])
+        results_df.to_csv(filename)
