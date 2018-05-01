@@ -150,12 +150,18 @@ if READ_RESULTS or WRITE_RESULTS:
     filename_diff = filename.split('.')[0] + '-diff.' + filename.split('.')[1]
     results_df = pa.DataFrame(data=results, columns=list(map(lambda x: x[1], classifiers)),
                               index=list(map(lambda x: x['name'], data)))
+    ranked_results_df = results_df.rank(axis=1, ascending=False)
+    ranked_results_df = ranked_results_df.append(pa.Series(ranked_results_df.mean(axis=0), name="Average Ranks"))
 
     if READ_RESULTS:
+        print('\n**** Results ****\n\n')
         print(results_df)
+        print('\n**** Ranked results ****\n\n')
+        print(ranked_results_df)
         try:
             prev_results_df = pa.read_csv(filename, index_col=0)
             results_diff_df = results_df.subtract(prev_results_df).round(decimals=3)
+            print('\n**** Results diff ****\n\n')
             print(results_diff_df)
         except Exception:
             pass
@@ -171,3 +177,4 @@ if READ_RESULTS or WRITE_RESULTS:
             './stuff/results/' + filename.split('.')[0] + str(RESULTS_VERSION).rjust(3, '0') + '.' +
             filename.split('.')[1])
         results_df.to_csv(filename)
+        ranked_results_df.to_csv(filename.split('.')[0] + '-ranked.' + filename.split('.')[1])

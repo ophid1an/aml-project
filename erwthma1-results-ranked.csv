@@ -1,0 +1,12 @@
+,DT,Bagged DT,AdaBoost DT,GradientBoost DT,OneVsOne DT,OneVsRest DT,RF,Bagged DT RP
+Iris,4.0,1.0,7.5,4.0,7.5,4.0,4.0,4.0
+Wine,7.0,3.0,5.5,4.0,5.5,8.0,1.0,2.0
+Breast Cancer,6.0,3.5,8.0,2.0,6.0,6.0,1.0,3.5
+Balance Scale,4.0,5.0,6.0,2.0,7.0,1.0,3.0,8.0
+Hayes-Roth,4.0,1.0,7.5,7.5,4.0,6.0,2.0,4.0
+Haberman's Survival,4.5,3.0,8.0,7.0,6.0,4.5,1.0,2.0
+Liver Disorders,6.0,1.5,4.0,1.5,6.0,6.0,3.0,8.0
+Banknote Authentication,5.5,3.0,5.5,1.0,5.5,5.5,2.0,8.0
+Ionosphere,6.0,4.0,8.0,3.0,6.0,6.0,1.0,2.0
+Contraceptive Method Choice,7.0,2.0,5.0,1.0,6.0,8.0,4.0,3.0
+Average Ranks,5.4,2.7,6.5,3.3,5.95,5.5,2.2,4.45
