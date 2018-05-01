@@ -1,11 +1,11 @@
-,tree,bagged tree,AdaBoost-ed tree,gradient boosting tree,one-vs-one tre,one-vs-rest tree,Random forest,bagged tree random patches
-Iris,0.0,-0.0,0.0,0.0,0.0,0.0,0.0,0.0
-Wine,0.0,-0.0,0.0,0.0,0.0,0.0,0.005,0.0
-Breast Cancer,0.0,0.0,0.0,0.0,0.0,0.0,0.011,0.0
-Balance Scale,0.0,0.0,0.0,0.0,0.0,0.0,0.023,0.0
-Hayes-Roth,0.0,0.0,0.0,0.0,0.0,0.0,0.02,0.0
-Haberman's Survival,0.0,0.0,0.0,0.0,0.0,0.0,-0.013,0.0
-Liver Disorders,-0.0,0.0,0.0,0.0,-0.0,-0.0,0.038,-0.0
-Banknote Authentication,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
-Ionosphere,0.0,0.0,0.0,0.0,0.0,0.0,0.005,0.0
-Contraceptive Method Choice,0.0,0.0,0.0,0.0,0.0,0.0,0.002,0.0
+,AdaBoost DT,AdaBoost-ed tree,Bagged DT,Bagged DT RP,DT,GradientBoost DT,OneVsOne DT,OneVsRest DT,RF,Random forest,bagged tree,bagged tree random patches,gradient boosting tree,one-vs-one tre,one-vs-rest tree,tree
+Iris,,,,,,,,,,,,,,,,
+Wine,,,,,,,,,,,,,,,,
+Breast Cancer,,,,,,,,,,,,,,,,
+Balance Scale,,,,,,,,,,,,,,,,
+Hayes-Roth,,,,,,,,,,,,,,,,
+Haberman's Survival,,,,,,,,,,,,,,,,
+Liver Disorders,,,,,,,,,,,,,,,,
+Banknote Authentication,,,,,,,,,,,,,,,,
+Ionosphere,,,,,,,,,,,,,,,,
+Contraceptive Method Choice,,,,,,,,,,,,,,,,

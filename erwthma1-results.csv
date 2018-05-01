@@ -1,4 +1,4 @@
-,tree,bagged tree,AdaBoost-ed tree,gradient boosting tree,one-vs-one tre,one-vs-rest tree,Random forest,bagged tree random patches
+,DT,Bagged DT,AdaBoost DT,GradientBoost DT,OneVsOne DT,OneVsRest DT,RF,Bagged DT RP
 Iris,0.96,0.967,0.953,0.96,0.953,0.96,0.96,0.96
 Wine,0.895,0.967,0.9,0.917,0.9,0.878,0.978,0.973
 Breast Cancer,0.918,0.958,0.914,0.961,0.918,0.918,0.965,0.958

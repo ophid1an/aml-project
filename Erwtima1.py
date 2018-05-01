@@ -15,7 +15,7 @@ from sklearn.tree import DecisionTreeClassifier
 RANDOM_STATE = 0
 READ_RESULTS = True
 WRITE_RESULTS = False
-RESULTS_VERSION = 5
+RESULTS_VERSION = 6
 
 iris_df = pa.read_csv("./Datasets/iris.csv", header=None)  # load Iris Dataset
 wine_df = pa.read_csv("./Datasets/wine.csv", header=None)  # load Wine Dataset
@@ -103,33 +103,33 @@ classifiers = []
 
 # Tree Classifier
 dt = DecisionTreeClassifier(random_state=RANDOM_STATE)
-classifiers.append([dt, "tree"])
+classifiers.append([dt, "DT"])
 
 # -----Manipulating the training examples-------
 # Bagging
 bagged_dt = BaggingClassifier(base_estimator=dt, n_estimators=100, random_state=RANDOM_STATE)
-classifiers.append([bagged_dt, "bagged tree"])
+classifiers.append([bagged_dt, "Bagged DT"])
 # Boosting
 ada = AdaBoostClassifier(base_estimator=dt, n_estimators=100, random_state=RANDOM_STATE)
-classifiers.append([ada, "AdaBoost-ed tree"])
+classifiers.append([ada, "AdaBoost DT"])
 
 gbm = GradientBoostingClassifier(n_estimators=100, random_state=RANDOM_STATE)
-classifiers.append([gbm, "gradient boosting tree"])
+classifiers.append([gbm, "GradientBoost DT"])
 # -----Manipulating the target variable------
 # One vs One
 ovo = OneVsOneClassifier(dt)
-classifiers.append([ovo, "one-vs-one tre"])
+classifiers.append([ovo, "OneVsOne DT"])
 # One vs Rest
 ovr = OneVsRestClassifier(dt)
-classifiers.append([ovr, "one-vs-rest tree"])
+classifiers.append([ovr, "OneVsRest DT"])
 # -----Injecting randomness------
 # Random forest
 rf = RandomForestClassifier(n_estimators=100, random_state=RANDOM_STATE)
-classifiers.append([rf, "Random forest"])
+classifiers.append([rf, "RF"])
 # -----Manipulating Features------
 # RandomPatches
 bagged_dt_mf = BaggingClassifier(dt, n_estimators=100, max_samples=0.7, max_features=0.7, random_state=RANDOM_STATE)
-classifiers.append([bagged_dt_mf, "bagged tree random patches"])
+classifiers.append([bagged_dt_mf, "Bagged DT RP"])
 
 results = []
 
