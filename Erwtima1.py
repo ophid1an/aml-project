@@ -15,7 +15,7 @@ from sklearn.tree import DecisionTreeClassifier
 RANDOM_STATE = 0
 READ_RESULTS = True
 WRITE_RESULTS = False
-RESULTS_VERSION = 4
+RESULTS_VERSION = 5
 
 iris_df = pa.read_csv("./Datasets/iris.csv", header=None)  # load Iris Dataset
 wine_df = pa.read_csv("./Datasets/wine.csv", header=None)  # load Wine Dataset
@@ -107,7 +107,7 @@ classifiers.append([dt, "tree"])
 
 # -----Manipulating the training examples-------
 # Bagging
-bagged_dt = BaggingClassifier(dt, n_estimators=100, random_state=RANDOM_STATE)
+bagged_dt = BaggingClassifier(base_estimator=dt, n_estimators=100, random_state=RANDOM_STATE)
 classifiers.append([bagged_dt, "bagged tree"])
 # Boosting
 ada = AdaBoostClassifier(base_estimator=dt, n_estimators=100, random_state=RANDOM_STATE)
@@ -124,7 +124,7 @@ ovr = OneVsRestClassifier(dt)
 classifiers.append([ovr, "one-vs-rest tree"])
 # -----Injecting randomness------
 # Random forest
-rf = RandomForestClassifier(random_state=RANDOM_STATE)
+rf = RandomForestClassifier(n_estimators=100, random_state=RANDOM_STATE)
 classifiers.append([rf, "Random forest"])
 # -----Manipulating Features------
 # RandomPatches
