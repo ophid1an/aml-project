@@ -1,0 +1,11 @@
+,tree,bagged tree,AdaBoost-ed tree,gradient boosting tree,one-vs-one tre,one-vs-rest tree,Random forest,bagged tree random patches
+Iris,0.946,0.953,0.946,0.932,0.953,0.94,0.947,0.933
+Wine,0.918,0.939,0.905,0.944,0.928,0.906,0.967,0.978
+Breast Cancer,0.914,0.96,0.914,0.963,0.914,0.914,0.954,0.965
+Balance Scale,0.38,0.42,0.349,0.508,0.387,0.396,0.43,0.501
+Hayes-Roth,0.595,0.61,0.58,0.616,0.603,0.602,0.596,0.588
+Haberman's Survival,0.523,0.526,0.552,0.51,0.479,0.523,0.598,0.552
+Liver Disorders,0.651,0.703,0.645,0.712,0.651,0.651,0.686,0.698
+Banknote Authentication,0.987,0.988,0.988,0.994,0.987,0.987,0.991,0.977
+Ionosphere,0.861,0.915,0.87,0.921,0.861,0.861,0.924,0.938
+Contraceptive Method Choice,0.465,0.519,0.491,0.558,0.478,0.463,0.511,0.518
