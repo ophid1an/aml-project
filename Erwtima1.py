@@ -1,25 +1,21 @@
 import time
-from sklearn import datasets
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.model_selection import cross_val_score
-from sklearn.ensemble import BaggingClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.neural_network import MLPClassifier
-from sklearn.svm import LinearSVC
-from sklearn.datasets import fetch_mldata
-from sklearn.ensemble import GradientBoostingClassifier
+
+import pandas as pa
+from sklearn import preprocessing
 from sklearn.ensemble import AdaBoostClassifier
+from sklearn.ensemble import BaggingClassifier
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import cross_val_score
 from sklearn.multiclass import OneVsOneClassifier
 from sklearn.multiclass import OneVsRestClassifier
-from sklearn.ensemble import RandomForestClassifier
-import numpy as nu
-import pandas as pa
-import scipy
+from sklearn.pipeline import make_pipeline
+from sklearn.tree import DecisionTreeClassifier
 
 RANDOM_STATE = 0
 READ_RESULTS = True
 WRITE_RESULTS = False
-RESULTS_VERSION = 1
+RESULTS_VERSION = 2
 
 iris_df = pa.read_csv("./Datasets/iris.csv", header=None)  # load Iris Dataset
 wine_df = pa.read_csv("./Datasets/wine.csv", header=None)  # load Wine Dataset
@@ -139,7 +135,8 @@ for d in data:
     row = []
     for classifier, label in classifiers:
         start = time.time()
-        scores = cross_val_score(classifier, d['X'], d['y'], cv=10)
+        pipeln = make_pipeline(preprocessing.StandardScaler(), classifier)
+        scores = cross_val_score(pipeln, d['X'], d['y'], cv=10)
         stop = time.time()
         print("%20s accuracy: %0.3f (+/- %0.3f), time:%.3f" % (label, scores.mean(), scores.std() * 2, stop - start))
         row.append(round(scores.mean(), 3))
