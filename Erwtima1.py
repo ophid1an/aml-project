@@ -15,7 +15,7 @@ from sklearn.tree import DecisionTreeClassifier
 RANDOM_STATE = 0
 READ_RESULTS = True
 WRITE_RESULTS = False
-RESULTS_VERSION = 2
+RESULTS_VERSION = 3
 
 iris_df = pa.read_csv("./Datasets/iris.csv", header=None)  # load Iris Dataset
 wine_df = pa.read_csv("./Datasets/wine.csv", header=None)  # load Wine Dataset
@@ -57,19 +57,22 @@ data.append(to_dict_data(
 # Balance-scale data and target
 data.append(to_dict_data(
     'Balance Scale',
-    balance_df.iloc[:, 1:],
+    pa.get_dummies(balance_df.iloc[:, 1:],
+                   columns=[1, 2, 3, 4]),
     balance_df.iloc[:, 0]))
 
 # hayes-roth data and target
 data.append(to_dict_data(
     'Hayes-Roth',
-    hayesroth_df.iloc[:, 1:-1],
+    pa.get_dummies(hayesroth_df.iloc[:, 1:-1],
+                   columns=[1, 2, 3, 4]),
     hayesroth_df.iloc[:, -1]))
 
 # Haberman survival data and target
 data.append(to_dict_data(
     'Haberman\'s Survival',
-    haberman_df.iloc[:, :-1],
+    pa.get_dummies(haberman_df.iloc[:, :-1],
+                   columns=[1]),
     haberman_df.iloc[:, -1]))
 
 # Liver Disorder  data and target
@@ -93,7 +96,8 @@ data.append(to_dict_data(
 # cmc data and target
 data.append(to_dict_data(
     'Contraceptive Method Choice',
-    cmc_df.iloc[:, :-1],
+    pa.get_dummies(cmc_df.iloc[:, :-1],
+                   columns=[1, 2, 6, 7]),
     cmc_df.iloc[:, -1]))
 
 classifiers = []
