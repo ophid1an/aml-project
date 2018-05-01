@@ -17,9 +17,9 @@ import pandas as pa
 import scipy
 
 RANDOM_STATE = 0
-READ_RESULTS = False
+READ_RESULTS = True
 WRITE_RESULTS = False
-VERSION = 1
+RESULTS_VERSION = 1
 
 iris_df = pa.read_csv("./Datasets/iris.csv", header=None)  # load Iris Dataset
 wine_df = pa.read_csv("./Datasets/wine.csv", header=None)  # load Wine Dataset
@@ -33,65 +33,75 @@ bank_df = pa.read_csv("./Datasets/data_banknote_authentication.csv",
 ionosphere_df = pa.read_csv("./Datasets/ionosphere.csv", header=None)  # load Ionosphere Dataset
 cmc_df = pa.read_csv("./Datasets/cmc.csv", header=None)  # load Contraceptive Method Choice Dataset
 
-Data = []
-target = []
+
+def to_dict_data(n, x, y):
+    return {'name': n, 'X': x, 'y': y}
+
+
+data = []
+
 # Iris data and target
-iris_data = iris_df.iloc[:, :-1]
-iris_target = iris_df.iloc[:, -1]
+data.append(to_dict_data(
+    'Iris',
+    iris_df.iloc[:, :-1],
+    iris_df.iloc[:, -1]))
+
 # Wine data and target
-wine_data = wine_df.iloc[:, 1:]
-wine_target = wine_df.iloc[:, 0]
+data.append(to_dict_data(
+    'Wine',
+    wine_df.iloc[:, 1:],
+    wine_df.iloc[:, 0]))
+
 # Breast cancer data and target
-bcancer_data = bcancer_df.iloc[:, 2:]
-bcancer_target = bcancer_df.iloc[:, 1]
+data.append(to_dict_data(
+    'Breast Cancer',
+    bcancer_df.iloc[:, 2:],
+    bcancer_df.iloc[:, 1]))
+
 # Balance-scale data and target
-balance_data = balance_df.iloc[:, 1:]
-balance_target = balance_df.iloc[:, 0]
+data.append(to_dict_data(
+    'Balance Scale',
+    balance_df.iloc[:, 1:],
+    balance_df.iloc[:, 0]))
+
 # hayes-roth data and target
-hayesroth_data = hayesroth_df.iloc[:, 1:-1]
-hayesroth_target = hayesroth_df.iloc[:, -1]
+data.append(to_dict_data(
+    'Hayes-Roth',
+    hayesroth_df.iloc[:, 1:-1],
+    hayesroth_df.iloc[:, -1]))
+
 # Haberman survival data and target
-haberman_data = haberman_df.iloc[:, :-1]
-haberman_target = haberman_df.iloc[:, -1]
+data.append(to_dict_data(
+    'Haberman\'s Survival',
+    haberman_df.iloc[:, :-1],
+    haberman_df.iloc[:, -1]))
+
 # Liver Disorder  data and target
-liver_data = liver_df.iloc[:, :-2]
-liver_target = liver_df.iloc[:, -2].map(lambda x: 0 if x < 3 else 1)
+data.append(to_dict_data(
+    'Liver Disorders',
+    liver_df.iloc[:, :-2],
+    liver_df.iloc[:, -2].map(lambda x: 0 if x < 3 else 1)))
+
 # Banknote Authentication data and target
-bank_data = bank_df.iloc[:, :-1]
-bank_target = bank_df.iloc[:, -1]
+data.append(to_dict_data(
+    'Banknote Authentication',
+    bank_df.iloc[:, :-1],
+    bank_df.iloc[:, -1]))
+
 # Ionosphere data and target
-ionosphere_data = ionosphere_df.iloc[:, :-1]
-ionosphere_target = ionosphere_df.iloc[:, -1]
+data.append(to_dict_data(
+    'Ionosphere',
+    ionosphere_df.iloc[:, :-1],
+    ionosphere_df.iloc[:, -1]))
+
 # cmc data and target
-cmc_data = cmc_df.iloc[:, :-1]
-cmc_target = cmc_df.iloc[:, -1]
-# Data is the table with all dataset data
-Data.append(iris_data)
-Data.append(wine_data)
-Data.append(bcancer_data)
-Data.append(balance_data)
-Data.append(hayesroth_data)
-Data.append(haberman_data)
-Data.append(liver_data)
-Data.append(bank_data)
-Data.append(ionosphere_data)
-Data.append(cmc_data)
-# Target is the table with all dataset targets
-target.append(iris_target)
-target.append(wine_target)
-target.append(bcancer_target)
-target.append(balance_target)
-target.append(hayesroth_target)
-target.append(haberman_target)
-target.append(liver_target)
-target.append(bank_target)
-target.append(ionosphere_target)
-target.append(cmc_target)
-# Table with the labels for each dataset
-Data_label = ["Iris", "Wine", "Breast Cancer", "Balance Scale", "Hayes-Roth", "Haberman's Survival",
-              "Liver Disorders", "Banknote Authentication", "Ionosphere", "Contraceptive Method Choice"]
+data.append(to_dict_data(
+    'Contraceptive Method Choice',
+    cmc_df.iloc[:, :-1],
+    cmc_df.iloc[:, -1]))
 
 classifiers = []
+
 # Tree Classifier
 dt = DecisionTreeClassifier(random_state=RANDOM_STATE)
 classifiers.append([dt, "tree"])
@@ -124,12 +134,12 @@ classifiers.append([bagged_dt_mf, "bagged tree random patches"])
 
 results = []
 
-for i in range(len(Data)):
-    print("------ %20s ------ " % (Data_label[i]))
+for d in data:
+    print("------ %20s ------ " % (d['name']))
     row = []
     for classifier, label in classifiers:
         start = time.time()
-        scores = cross_val_score(classifier, Data[i], target[i], cv=10)
+        scores = cross_val_score(classifier, d['X'], d['y'], cv=10)
         stop = time.time()
         print("%20s accuracy: %0.3f (+/- %0.3f), time:%.3f" % (label, scores.mean(), scores.std() * 2, stop - start))
         row.append(round(scores.mean(), 3))
@@ -138,7 +148,8 @@ for i in range(len(Data)):
 if READ_RESULTS or WRITE_RESULTS:
     filename = 'erwthma1-results.csv'
     filename_diff = filename.split('.')[0] + '-diff.' + filename.split('.')[1]
-    results_df = pa.DataFrame(data=results, columns=list(map(lambda x: x[1], classifiers)), index=Data_label)
+    results_df = pa.DataFrame(data=results, columns=list(map(lambda x: x[1], classifiers)),
+                              index=list(map(lambda x: x['name'], data)))
 
     if READ_RESULTS:
         print(results_df)
@@ -157,5 +168,6 @@ if READ_RESULTS or WRITE_RESULTS:
         except Exception:
             pass
         results_df.to_csv(
-            './stuff/results/' + filename.split('.')[0] + str(VERSION).rjust(3, '0') + '.' + filename.split('.')[1])
+            './stuff/results/' + filename.split('.')[0] + str(RESULTS_VERSION).rjust(3, '0') + '.' +
+            filename.split('.')[1])
         results_df.to_csv(filename)
