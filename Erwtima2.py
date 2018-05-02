@@ -13,7 +13,7 @@ from sklearn import preprocessing
 
 RANDOM_STATE = 0
 
-heart_df = pa.read_csv("./Datasets/heart.txt", delimiter=" ", header=0)  # load StatLog(heart) dataset
+heart_df = pa.read_csv("./Datasets/heart.txt", delimiter=" ", header=None)  # load StatLog(heart) dataset
 
 # Iris data and target
 X = heart_df.iloc[:, :-1].values
