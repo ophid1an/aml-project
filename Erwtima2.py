@@ -36,8 +36,7 @@ for n, i in enumerate(heart_target):
     elif i == 2:
         heart_target[n] = 1
         cost.append([1, 5, 0, 0])
-# for i in range(0,269):
-# cost.append([1,5,0,0])
+
 cost_mat = nu.array(cost)
 
 # Table with the labels for each dataset
@@ -69,19 +68,14 @@ for model in classifiers.keys():
     classifiers[model]["ptrain"] = classifiers[model]["f"].predict_proba(X_train)
     # Sampling
 
-    classifiers[model]["c_o"] = classifiers[model]["f"].fit(X_cps_o, y_cps_o).predict(
-        X_test)  # Probabilities cost Oversampling
-    classifiers[model]["c_o_p"] = classifiers[model]["f"].fit(X_cps_o, y_cps_o).predict_proba(
-        X_test)  # Probabilities cost Oversampling
+    classifiers[model]["c_o"] = classifiers[model]["f"].fit(X_cps_o, y_cps_o).predict(X_test)  # Probabilities cost Oversampling
+    classifiers[model]["c_o_p"] = classifiers[model]["f"].fit(X_cps_o, y_cps_o).predict_proba(X_test)  # Probabilities cost Oversampling
 
-    classifiers[model]["c_r"] = classifiers[model]["f"].fit(X_cps_r, y_cps_r).predict(
-        X_test)  # Probabilities cost RejectionSampling
-    classifiers[model]["c_r_p"] = classifiers[model]["f"].fit(X_cps_r, y_cps_r).predict_proba(
-        X_test)  # Probabilities cost RejectionSampling
+    classifiers[model]["c_r"] = classifiers[model]["f"].fit(X_cps_r, y_cps_r).predict(X_test)  # Probabilities cost RejectionSampling
+    classifiers[model]["c_r_p"] = classifiers[model]["f"].fit(X_cps_r, y_cps_r).predict_proba(X_test)  # Probabilities cost RejectionSampling
 
     classifiers[model]["c_u"] = classifiers[model]["f"].fit(X_u, y_u).predict(X_test)  # Probabilities undersampling
-    classifiers[model]["c_u_p"] = classifiers[model]["f"].fit(X_u, y_u).predict_proba(
-        X_test)  # Probabilities cost undersampling
+    classifiers[model]["c_u_p"] = classifiers[model]["f"].fit(X_u, y_u).predict_proba(X_test)  # Probabilities cost undersampling
 
 measures = {"f1": f1_score, "pre": precision_score,
             "rec": recall_score, "acc": accuracy_score}
@@ -109,22 +103,19 @@ for model in classifiers.keys():
     # Evaluate cost Oversampling
     results["sav_score"].loc[model + "-O"] = savings_score(y_test, classifiers[model]["c_o"], cost_mat_test)
     results["cost_loss"].loc[model + "-O"] = cost_loss(y_test, classifiers[model]["c_o"], cost_mat_test)
-    tempO = binary_classification_metrics(y_test, classifiers[model]["c_o"],
-                                          classifiers[model]["c_o_p"][:, 1])  # various statistics
+    tempO = binary_classification_metrics(y_test, classifiers[model]["c_o"], classifiers[model]["c_o_p"][:, 1])  # various statistics
     results["brier_loss"].loc[model + "-O"] = tempO["brier_loss"]
     results["auc"].loc[model + "-O"] = tempO["auc"]
     # Evaluate cost RejectionSampling
     results["sav_score"].loc[model + "-R"] = savings_score(y_test, classifiers[model]["c_r"], cost_mat_test)
     results["cost_loss"].loc[model + "-R"] = cost_loss(y_test, classifiers[model]["c_r"], cost_mat_test)
-    tempR = binary_classification_metrics(y_test, classifiers[model]["c_r"],
-                                          classifiers[model]["c_r_p"][:, 1])  # various statistics
+    tempR = binary_classification_metrics(y_test, classifiers[model]["c_r"],classifiers[model]["c_r_p"][:, 1])  # various statistics
     results["brier_loss"].loc[model + "-R"] = tempR["brier_loss"]
     results["auc"].loc[model + "-R"] = tempO["auc"]
     # Evaluate undersampling
     results["sav_score"].loc[model + "-U"] = savings_score(y_test, classifiers[model]["c_u"], cost_mat_test)
     results["cost_loss"].loc[model + "-U"] = cost_loss(y_test, classifiers[model]["c_u"], cost_mat_test)
-    tempU = binary_classification_metrics(y_test, classifiers[model]["c_u"],
-                                          classifiers[model]["c_u_p"][:, 1])  # various statistics
+    tempU = binary_classification_metrics(y_test, classifiers[model]["c_u"],classifiers[model]["c_u_p"][:, 1])  # various statistics
     results["brier_loss"].loc[model + "-U"] = tempU["brier_loss"]
     results["auc"].loc[model + "-U"] = tempO["auc"]
 
