@@ -12,6 +12,7 @@ from IPython.core.pylabtools import figsize
 from costcla.metrics import savings_score, cost_loss, binary_classification_metrics
 from costcla.models import BayesMinimumRiskClassifier, ThresholdingOptimization, CostSensitiveRandomForestClassifier
 from costcla.sampling import cost_sampling, undersampling
+from sklearn import preprocessing
 from sklearn.calibration import CalibratedClassifierCV
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_score
@@ -22,7 +23,9 @@ from sklearn.svm import LinearSVC
 heart_df = p.read_csv("./Datasets/heart.txt", delimiter=" ", header=None)  # load StatLog(heart) dataset
 
 # Iris data and target
-heart_data = heart_df.iloc[:, :-1].values
+heart_data = heart_df.iloc[:, :-1]
+heart_data = p.get_dummies(heart_data, columns=[2, 6, 12])  # One-hot-encode categorical variables
+heart_data = heart_data.values
 heart_target = heart_df.iloc[:, -1].values
 # set target to binary 0, 1 instead 1,2
 cost = []
@@ -40,6 +43,11 @@ cost_mat = nu.array(cost)
 # Table with the labels for each dataset
 X_train, X_test, y_train, y_test, cost_mat_train, cost_mat_test = \
     train_test_split(heart_data, heart_target, cost_mat, test_size=0.33, random_state=0)
+
+# Scale X_train, X_test
+scaler = preprocessing.StandardScaler().fit(X_train)
+X_train = scaler.transform(X_train)
+X_test = scaler.transform(X_test)
 
 # Cost sampling
 X_cps_o, y_cps_o, cost_mat_cps_o = cost_sampling(X_train, y_train, cost_mat_train, method='OverSampling')
