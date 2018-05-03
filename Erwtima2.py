@@ -1,8 +1,8 @@
 #Machine Learning
 #Bozas Aristeidis
 #AM: 740
-#Giannis Dermetzogloy
-#AM:
+#Dermentzoglou Ioannis
+#AM: 743
 import time
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import RandomForestClassifier
