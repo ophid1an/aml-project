@@ -1,3 +1,9 @@
+# Machine Learning
+# Bozas Aristeidis
+# AM: 740
+# Dermentzoglou Ioannis
+# AM: 743
+
 import time
 from itertools import product
 
