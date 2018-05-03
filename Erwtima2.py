@@ -19,15 +19,11 @@ from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import LinearSVC
 
-Data = []
-target = []
-data = "./Datasets/heart.txt"
-heart_data = p.read_csv(data, delimiter=" ")  # load StatLog(heart) dataset
+heart_df = p.read_csv("./Datasets/heart.txt", delimiter=" ", header=None)  # load StatLog(heart) dataset
 
 # Iris data and target
-array_heart = heart_data.values
-heart_data = array_heart[:, 0:12]
-heart_target = array_heart[:, 13]
+heart_data = heart_df.iloc[:, :-1].values
+heart_target = heart_df.iloc[:, -1].values
 # set target to binary 0, 1 instead 1,2
 cost = []
 for n, i in enumerate(heart_target):
@@ -40,10 +36,6 @@ for n, i in enumerate(heart_target):
 # for i in range(0,269):
 # cost.append([1,5,0,0])
 cost_mat = nu.array(cost)
-# Data is the table with all dataset data
-Data.append(heart_data)
-# Target is the table with all dataset targets
-target.append(heart_target)
 
 # Table with the labels for each dataset
 X_train, X_test, y_train, y_test, cost_mat_train, cost_mat_test = \
@@ -82,9 +74,6 @@ for model in classifiers.keys():
     classifiers[model]["c_u"] = classifiers[model]["f"].fit(X_u, y_u).predict(X_test)  # Probabilities undersampling
     classifiers[model]["c_u_p"] = classifiers[model]["f"].fit(X_u, y_u).predict_proba(
         X_test)  # Probabilities cost undersampling
-
-# a = binary_classification_metrics(y_test, classifiers[model]["c_r"], classifiers[model]["c_r_p"][:, 1])
-# print(a)
 
 measures = {"f1": f1_score, "pre": precision_score,
             "rec": recall_score, "acc": accuracy_score}
